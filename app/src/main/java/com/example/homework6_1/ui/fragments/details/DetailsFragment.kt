@@ -1,4 +1,4 @@
-package com.example.rickandmorty.ui.fragments.charactersDetailed
+package com.example.homework6_1.ui.fragments.details
 
 import android.graphics.Color
 import android.os.Bundle
@@ -9,21 +9,21 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.example.rickandmorty.R
-import com.example.rickandmorty.data.model.Character
-import com.example.rickandmorty.databinding.FragmentCartoonBinding
-import com.example.rickandmorty.databinding.FragmentCharactersDetailedBinding
-import com.example.rickandmorty.utils.Resource
-import com.example.rickandmorty.utils.gone
-import com.example.rickandmorty.utils.visible
+import com.example.homework6_1.data.model.Character
+import com.example.homework6_1.databinding.FragmentDetailsBinding
+import com.example.homework6_1.utils.Resource
+import com.example.homework6_1.utils.gone
+import com.example.homework6_1.utils.visible
+import com.example.rickandmorty.ui.fragments.charactersDetailed.CharactersDetailedAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
 @AndroidEntryPoint
 class CharactersDetailedFragment : Fragment() {
-    private var _binding: FragmentCharactersDetailedBinding? = null
+    private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel by lazy {
@@ -38,7 +38,7 @@ class CharactersDetailedFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCharactersDetailedBinding.inflate(inflater, container, false)
+        _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -47,11 +47,11 @@ class CharactersDetailedFragment : Fragment() {
 
         binding.rvEpisodes.adapter = charactersDetailedAdapter
 
-        val characterId =arguments?.getInt("characterId") ?: return
+        val characterId = arguments?.getInt("characterId") ?: return
         viewModel.setCharacterId(characterId)
 
-        viewModel.charactersDetails.observe(viewLifecycleOwner){resource->
-            when(resource){
+        viewModel.charactersDetails.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
                 is Resource.Error -> {
                     binding.pbDetails.gone()
                     Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
@@ -61,15 +61,13 @@ class CharactersDetailedFragment : Fragment() {
                 }
                 is Resource.Success -> {
                     binding.pbDetails.gone()
-                    resource.data?.let {character ->
+                    resource.data.let { character ->
                         bind(character)
                         charactersDetailedAdapter.submitList(character.episode)
                     }
                 }
             }
-
         }
-
     }
 
     private fun bind(character: Character) = with(binding) {
@@ -98,7 +96,6 @@ class CharactersDetailedFragment : Fragment() {
             else -> Color.GRAY
         }
         circleStatus?.setColorFilter(color, android.graphics.PorterDuff.Mode.SRC_IN)
-
     }
 
     override fun onDestroyView() {

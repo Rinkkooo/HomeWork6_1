@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.CharactersFragment">
+    tools:context=".ui.fragments.character.CharactersFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -11,5 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/character_item" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:visibility="visible"
+        android:visibility="gone"
+        android:progressTint="@color/black"
+        android:layout_gravity="center"
+        />
 
 </FrameLayout>

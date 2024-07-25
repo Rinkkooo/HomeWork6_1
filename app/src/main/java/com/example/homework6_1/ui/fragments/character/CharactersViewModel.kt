@@ -1,4 +1,4 @@
-package com.example.homework6_1.ui.fragments
+package com.example.homework6_1.ui.fragments.character
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

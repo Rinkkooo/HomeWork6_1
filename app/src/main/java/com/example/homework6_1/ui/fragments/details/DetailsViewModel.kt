@@ -3,10 +3,12 @@ package com.example.homework6_1.ui.fragments.details
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.homework6_1.data.model.Character
 import com.example.homework6_1.data.repository.CartoonRepository
 import com.example.homework6_1.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,8 +31,9 @@ class CharactersDetailedViewModel @Inject constructor(
 
     private fun fetchCharacterDetails() {
         characterId?.let { id ->
-            repository.getCharacterById(id).observeForever { resource ->
-                _charactersDetails.postValue(resource)
+            viewModelScope.launch {
+                val result = repository.getCharacterById(id)
+                _charactersDetails.postValue(result)
             }
         }
     }

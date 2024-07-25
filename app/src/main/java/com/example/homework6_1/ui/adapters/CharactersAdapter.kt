@@ -4,23 +4,35 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.homework6_1.R
 import com.example.homework6_1.data.model.Character
 import com.example.homework6_1.databinding.CharacterItemBinding
+import com.example.homework6_1.ui.interfaces.OnClick
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class CharactersAdapter :
+class CharactersAdapter(private val listener: OnClick) :
     ListAdapter<Character, CharactersAdapter.CharacterViewHolder>(diffUtil) {
 
-    inner class CharacterViewHolder(private val binding: CharacterItemBinding) : ViewHolder(binding.root) {
+    inner class CharacterViewHolder(private val binding: CharacterItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onClick(getItem(position))
+                }
+            }
+        }
+
         fun bind(item: Character?) {
             with(binding) {
                 tvName.text = item!!.name
-                tvStatus.text = "${item!!.status} - ${item!!.species}"
+                tvStatus.text = "${item.status} - ${item.species}"
                 tvCurrentLocation.text = item.location.name
             }
 
@@ -49,15 +61,16 @@ class CharactersAdapter :
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
-}
 
-private val diffUtil = object : DiffUtil.ItemCallback<Character>(){
-    override fun areItemsTheSame(oldItem: Character, newItem: Character): Boolean {
-        return oldItem.id == newItem.id
+    companion object {
+        private val diffUtil = object : DiffUtil.ItemCallback<Character>() {
+            override fun areItemsTheSame(oldItem: Character, newItem: Character): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Character, newItem: Character): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
-
-    override fun areContentsTheSame(oldItem: Character, newItem: Character): Boolean {
-        return oldItem == newItem
-    }
-
 }

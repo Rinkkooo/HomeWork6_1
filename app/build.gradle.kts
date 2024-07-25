@@ -70,5 +70,13 @@ dependencies {
     //Glide
     implementation (libs.glide)
 
+    //Navigate
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+
+    //coroutines
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
 
 }

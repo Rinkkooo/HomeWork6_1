@@ -2,19 +2,21 @@ package com.example.homework6_1.ui.fragments.details
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.homework6_1.data.model.Character
 import com.example.homework6_1.databinding.FragmentDetailsBinding
 import com.example.homework6_1.utils.Resource
 import com.example.homework6_1.utils.gone
 import com.example.homework6_1.utils.visible
-import com.example.rickandmorty.ui.fragments.charactersDetailed.CharactersDetailedAdapter
+import com.example.homework6_1.ui.adapters.CharactersDetailedAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -29,6 +31,8 @@ class CharactersDetailedFragment : Fragment() {
     private val viewModel by lazy {
         ViewModelProvider(this)[CharactersDetailedViewModel::class.java]
     }
+
+    private val args: CharactersDetailedFragmentArgs by navArgs()
 
     private val charactersDetailedAdapter by lazy {
         CharactersDetailedAdapter()
@@ -47,19 +51,23 @@ class CharactersDetailedFragment : Fragment() {
 
         binding.rvEpisodes.adapter = charactersDetailedAdapter
 
-        val characterId = arguments?.getInt("characterId") ?: return
-        viewModel.setCharacterId(characterId)
+        val character = args.character
+        bind(character)
+        charactersDetailedAdapter.submitList(character.episode)
 
         viewModel.charactersDetails.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Error -> {
+                    Log.e("CharactersDetailedFragment", "Error: ${resource.message}")
                     binding.pbDetails.gone()
                     Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Loading -> {
+                    Log.d("CharactersDetailedFragment", "Loading")
                     binding.pbDetails.visible()
                 }
                 is Resource.Success -> {
+                    Log.d("CharactersDetailedFragment", "Success")
                     binding.pbDetails.gone()
                     resource.data.let { character ->
                         bind(character)
@@ -96,10 +104,5 @@ class CharactersDetailedFragment : Fragment() {
             else -> Color.GRAY
         }
         circleStatus?.setColorFilter(color, android.graphics.PorterDuff.Mode.SRC_IN)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

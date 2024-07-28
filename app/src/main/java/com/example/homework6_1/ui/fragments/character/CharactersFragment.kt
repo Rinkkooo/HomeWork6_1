@@ -68,7 +68,7 @@ class CharactersFragment : Fragment(), OnClick {
     }
 
     override fun onClick(character: Character) {
-        viewModel.selectedCharacter(character)
-        findNavController().navigate(R.id.action_charactersFragment_to_charactersDetailedFragment)
+        val action = CharactersFragmentDirections.actionCharactersFragmentToCharactersDetailedFragment(character)
+        findNavController().navigate(action)
     }
 }

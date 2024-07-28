@@ -32,7 +32,11 @@ class CharactersDetailedViewModel @Inject constructor(
     private fun fetchCharacterDetails() {
         characterId?.let { id ->
             viewModelScope.launch {
+                _charactersDetails.postValue(Resource.Loading())
                 val result = repository.getCharacterById(id)
+                if (result is Resource.Error) {
+                    _error.postValue(result.message)
+                }
                 _charactersDetails.postValue(result)
             }
         }

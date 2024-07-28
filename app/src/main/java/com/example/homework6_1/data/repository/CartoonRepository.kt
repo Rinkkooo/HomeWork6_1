@@ -5,9 +5,8 @@ import com.example.homework6_1.data.model.Character
 import com.example.homework6_1.utils.Resource
 import retrofit2.HttpException
 import java.io.IOException
-import javax.inject.Inject
 
-class CartoonRepository @Inject constructor(
+class CartoonRepository(
     private val cartoonApiService: CartoonApiService
 ) {
     suspend fun getCharacters(): Resource<List<Character>> {

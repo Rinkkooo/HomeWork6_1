@@ -34,10 +34,8 @@ class CharactersAdapter(private val listener: OnClick) :
                 tvName.text = item!!.name
                 tvStatus.text = "${item.status} - ${item.species}"
                 tvCurrentLocation.text = item.location.name
+                binding.tvCurrentTime.text = item.created
             }
-
-            val currentTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
-            binding.tvCurrentTime.text = currentTime
 
             Glide.with(binding.root.context)
                 .load(item?.image)
@@ -54,7 +52,8 @@ class CharactersAdapter(private val listener: OnClick) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        val binding = CharacterItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            CharacterItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CharacterViewHolder(binding)
     }
 

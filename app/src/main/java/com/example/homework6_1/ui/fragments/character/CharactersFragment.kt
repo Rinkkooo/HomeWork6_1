@@ -6,10 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.homework6_1.R
 import com.example.homework6_1.data.model.Character
 import com.example.homework6_1.databinding.FragmentCharactersBinding
 import com.example.homework6_1.ui.adapters.CharactersAdapter
@@ -17,16 +15,15 @@ import com.example.homework6_1.ui.interfaces.OnClick
 import com.example.homework6_1.utils.Resource
 import com.example.homework6_1.utils.gone
 import com.example.homework6_1.utils.visible
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@AndroidEntryPoint
 class CharactersFragment : Fragment(), OnClick {
 
     private val binding by lazy {
         FragmentCharactersBinding.inflate(layoutInflater)
     }
 
-    private val viewModel: CharactersViewModel by viewModels()
+    private val viewModel by viewModel<CharactersViewModel>()
 
     private val charactersAdapter by lazy {
         CharactersAdapter(this)

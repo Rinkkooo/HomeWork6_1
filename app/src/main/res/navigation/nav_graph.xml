@@ -17,7 +17,11 @@
     <fragment
         android:id="@+id/charactersDetailedFragment"
         android:name="com.example.homework6_1.ui.fragments.details.CharactersDetailedFragment"
-        android:label="CharactersDetailedFragment" />
+        android:label="CharactersDetailedFragment">
+        <argument
+            android:name="character"
+            app:argType="com.example.homework6_1.data.model.Character" />
+    </fragment>
 
 
 </navigation>

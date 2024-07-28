@@ -1,8 +1,10 @@
 package com.example.homework6_1.data.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
-
+@Parcelize
 data class Character(
     @SerializedName("id")
     val id: Int,
@@ -28,4 +30,4 @@ data class Character(
     val url: String,
     @SerializedName("created")
     val created: String
-)
+): Parcelable

@@ -7,12 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.homework6_1.data.model.Character
 import com.example.homework6_1.data.repository.CartoonRepository
 import com.example.homework6_1.utils.Resource
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class CharactersViewModel @Inject constructor(
+class CharactersViewModel(
     private val cartoonRepository: CartoonRepository
 ) : ViewModel() {
 

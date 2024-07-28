@@ -3,34 +3,30 @@ package com.example.homework6_1.ui.fragments.details
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.homework6_1.data.model.Character
 import com.example.homework6_1.databinding.FragmentDetailsBinding
+import com.example.homework6_1.ui.adapters.CharactersDetailedAdapter
 import com.example.homework6_1.utils.Resource
 import com.example.homework6_1.utils.gone
 import com.example.homework6_1.utils.visible
-import com.example.homework6_1.ui.adapters.CharactersDetailedAdapter
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-@AndroidEntryPoint
 class CharactersDetailedFragment : Fragment() {
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by lazy {
-        ViewModelProvider(this)[CharactersDetailedViewModel::class.java]
-    }
+    private val viewModel by viewModel<CharactersDetailedViewModel>()
 
     private val args: CharactersDetailedFragmentArgs by navArgs()
 

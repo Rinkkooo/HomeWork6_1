@@ -1,27 +1,22 @@
 package com.example.homework6_1.ui.fragments.character
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.homework6_1.data.model.Character
 import com.example.homework6_1.databinding.FragmentCharactersBinding
 import com.example.homework6_1.ui.adapters.CharactersAdapter
+import com.example.homework6_1.ui.fragments.BaseFragment
 import com.example.homework6_1.ui.interfaces.OnClick
 import com.example.homework6_1.utils.Resource
 import com.example.homework6_1.utils.gone
+import com.example.homework6_1.utils.showToast
 import com.example.homework6_1.utils.visible
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CharactersFragment : Fragment(), OnClick {
-
-    private val binding by lazy {
-        FragmentCharactersBinding.inflate(layoutInflater)
-    }
+class CharactersFragment :
+    BaseFragment<FragmentCharactersBinding>(FragmentCharactersBinding::inflate), OnClick {
 
     private val viewModel by viewModel<CharactersViewModel>()
 
@@ -29,33 +24,16 @@ class CharactersFragment : Fragment(), OnClick {
         CharactersAdapter(this)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
 
-        viewModel.character.observe(viewLifecycleOwner) { characters ->
-            when (characters) {
-                is Resource.Error -> {
-                    Toast.makeText(requireContext(), characters.message, Toast.LENGTH_SHORT).show()
-                }
-                is Resource.Success -> {
-                    charactersAdapter.submitList(characters.data)
-                }
-                else -> {
-                }
-            }
-
-            when (characters) {
-                is Resource.Loading -> binding.progressBar.visible()
-                else -> binding.progressBar.gone()
-            }
+        viewModel.character.observe(viewLifecycleOwner) { resource ->
+            if (resource is Resource.Loading) binding.progressBar.visible() else binding.progressBar.gone()
+            handleResource(resource,
+                onSuccess = {data -> charactersAdapter.submitList(data)},
+                onError = {message -> showToast(message)}
+            )
         }
     }
 
@@ -65,7 +43,10 @@ class CharactersFragment : Fragment(), OnClick {
     }
 
     override fun onClick(character: Character) {
-        val action = CharactersFragmentDirections.actionCharactersFragmentToCharactersDetailedFragment(character)
+        val action =
+            CharactersFragmentDirections.actionCharactersFragmentToCharactersDetailedFragment(
+                character
+            )
         findNavController().navigate(action)
     }
 }

@@ -10,6 +10,7 @@ import com.example.homework6_1.R
 import com.example.homework6_1.data.model.Character
 import com.example.homework6_1.databinding.CharacterItemBinding
 import com.example.homework6_1.ui.interfaces.OnClick
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -34,7 +35,16 @@ class CharactersAdapter(private val listener: OnClick) :
                 tvName.text = item!!.name
                 tvStatus.text = "${item.status} - ${item.species}"
                 tvCurrentLocation.text = item.location.name
-                binding.tvCurrentTime.text = item.created
+                val originalFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+                val targetFormat = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
+                try {
+                    val date: Date? = originalFormat.parse(item.created)
+                    val formattedDate: String = targetFormat.format(date!!)
+                    tvCurrentTime.text = formattedDate
+                } catch (e: ParseException) {
+                    e.printStackTrace()
+                    tvCurrentTime.text = item.created
+                }
             }
 
             Glide.with(binding.root.context)

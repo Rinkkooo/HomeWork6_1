@@ -16,21 +16,13 @@ class CharactersViewModel(
     private val _character = MutableLiveData<Resource<List<Character>>>()
     val character: LiveData<Resource<List<Character>>> get() = _character
 
-    private val _selectedCharacter = MutableLiveData<Character>()
-    val selectedCharacter: LiveData<Character> get() = _selectedCharacter
-
     init {
         fetchCharacters()
     }
 
     private fun fetchCharacters() {
-        viewModelScope.launch {
-            val result = cartoonRepository.getCharacters()
-            _character.postValue(result)
+        cartoonRepository.getCharacters().observeForever { resource ->
+            _character.postValue(resource)
         }
-    }
-
-    fun selectedCharacter(character: Character) {
-        _selectedCharacter.postValue(character)
     }
 }
